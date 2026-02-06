@@ -9,47 +9,49 @@ from collections import Counter
 
 app = Flask(__name__)
 
-# Configuration
-CSV_FILE = 'data.csv'
-CHARTS_DIR = 'static/charts'
+# Configuration - Use absolute paths for Render compatibility
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_FILE = os.path.join(BASE_DIR, 'data.csv')
+CHARTS_DIR = os.path.join(BASE_DIR, 'static', 'charts')
 
 # Ensure directories exist
-os.makedirs('templates', exist_ok=True)
+os.makedirs(os.path.join(BASE_DIR, 'templates'), exist_ok=True)
 os.makedirs(CHARTS_DIR, exist_ok=True)
 
-# Initialize CSV file with headers if it doesn't exist
-def init_csv():
-    """Initialize CSV file with column headers"""
+# CSV header definition
+CSV_HEADERS = [
+    'name',
+    'dob',
+    'department',
+    'college_name',
+    'region',
+    'city',
+    'regional_influence',
+    'language_preference',
+    'college_influence',
+    'watch_frequency',
+    'streaming_platform',
+    'series_watched',
+    'favorite_series',
+    'rating_got',
+    'rating_bb',
+    'rating_bcs',
+    'rating_dark',
+    'rating_sopranos',
+    'rating_hotd',
+    'rating_knight',
+    'genre_preference',
+    'best_storytelling',
+    'most_recommended',
+    'important_factor'
+]
+
+def ensure_csv_exists():
+    """Create CSV with headers if it doesn't exist (called on every submission)"""
     if not os.path.exists(CSV_FILE):
-        headers = [
-            'name',
-            'dob',
-            'department',
-            'college_name',
-            'region',
-            'city',
-            'regional_influence',
-            'language_preference',
-            'college_influence',
-            'watch_frequency',
-            'streaming_platform',
-            'series_watched',
-            'favorite_series',
-            'rating_got',
-            'rating_bb',
-            'rating_bcs',
-            'rating_dark',
-            'rating_sopranos',
-            'rating_hotd',
-            'rating_knight',
-            'genre_preference',
-            'best_storytelling',
-            'most_recommended',
-            'important_factor'
-        ]
         with open(CSV_FILE, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
-            writer.writerow(headers)
+            writer.writerow(CSV_HEADERS)
 
 @app.route('/')
 def index():
@@ -60,6 +62,9 @@ def index():
 def submit():
     """Handle form submission and save to CSV"""
     try:
+        # Ensure CSV file exists with headers before writing
+        ensure_csv_exists()
+        
         # Extract form data
         data = {
             'name': request.form.get('name', ''),
@@ -88,7 +93,7 @@ def submit():
             'important_factor': request.form.get('important_factor', '')
         }
         
-        # Append to CSV
+        # Append data to CSV (headers already exist from ensure_csv_exists)
         with open(CSV_FILE, 'a', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow(data.values())
@@ -213,12 +218,18 @@ def success():
 def charts():
     """Generate and display charts from CSV data"""
     try:
-        # Read CSV data
+        # Check if CSV exists and has data
         if not os.path.exists(CSV_FILE):
             return "No data available yet. Please submit the survey first.", 404
         
+        # Check file size to ensure it's not just headers
+        if os.path.getsize(CSV_FILE) < 100:  # File too small (likely just headers)
+            return "No data available yet. Please submit the survey first.", 404
+        
+        # Read CSV data with explicit path
         df = pd.read_csv(CSV_FILE)
         
+        # Verify DataFrame has actual data rows
         if len(df) == 0:
             return "No data available yet. Please submit the survey first.", 404
         
@@ -427,12 +438,10 @@ def charts():
         return f"Error generating charts: {str(e)}", 500
 
 if __name__ == '__main__':
-    # Initialize CSV file
-    init_csv()
-    
     # Get port from environment variable (for Render deployment) or default to 5000
     port = int(os.environ.get('PORT', 5000))
     
     # Run the app
     # Use 0.0.0.0 to make it accessible externally (required for Render)
+    # Note: CSV initialization happens on first form submission via ensure_csv_exists()
     app.run(host='0.0.0.0', port=port, debug=False)
