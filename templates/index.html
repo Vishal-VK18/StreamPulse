@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Series Popularity and Preference Survey</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#0a0a0a",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        body {
+            font-family: "Spline Sans", sans-serif;
+            background-color: #0a0a0a;
+        }
+        .background-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: -10;
+            overflow: hidden;
+            pointer-events: none;
+            background: #0a0a0a;
+        }
+        .scattered-poster {
+            position: absolute;
+            width: 300px;
+            height: 450px;
+            object-fit: cover;
+            opacity: 0.15;
+            filter: blur(15px);
+        }
+        .bg-overlay-gradient {
+            background: radial-gradient(circle at center, rgba(10, 10, 10, 0.4) 0%, rgba(10, 10, 10, 0.9) 60%, #1a0505 100%);
+            position: fixed;
+            inset: 0;
+            z-index: -5;
+            pointer-events: none;
+        }
+        .glass-container {
+            background: rgba(20, 15, 15, 0.75);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .side-image {
+            opacity: 0.4;
+            filter: blur(2px);
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+        .side-image:hover {
+            opacity: 0.6;
+            filter: blur(1px);
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            background: #2a1a1a;
+            height: 6px;
+            border-radius: 5px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ec1313;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+        input[type="range"]::-moz-range-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ec1313;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+        
+        /* Dark dropdown styling - FIX #3 */
+        select {
+            color-scheme: dark;
+        }
+        select option {
+            background-color: #1a1a1a;
+            color: #e4e4e7;
+            padding: 8px;
+        }
+        select option:hover,
+        select option:focus,
+        select option:checked {
+            background-color: #2a1a1a;
+            background: linear-gradient(to right, #2a1a1a, #1a1a1a);
+            color: white;
+        }
+        /* Additional dark dropdown styling for different browsers */
+        select::-webkit-scrollbar {
+            width: 8px;
+            background: #1a1a1a;
+        }
+        select::-webkit-scrollbar-thumb {
+            background: #3a3a3a;
+            border-radius: 4px;
+        }
+        select::-webkit-scrollbar-thumb:hover {
+            background: #ec1313;
+        }
+        
+        /* Dark date picker input styling - FIX #1 */
+        input[type="date"] {
+            color-scheme: dark;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) brightness(0.8);
+            cursor: pointer;
+        }
+        input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+            color: #a1a1aa;
+        }
+        input[type="date"]::-webkit-datetime-edit-text {
+            color: #71717a;
+        }
+    </style>
+</head>
+
+<body class="bg-background-dark text-white min-h-screen selection:bg-primary selection:text-white overflow-x-hidden">
+
+    <!-- Background scattered posters -->
+    <div class="background-wrap">
+        <img alt="Game of Thrones Poster" class="scattered-poster"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsDMPJiv2lR0h7ZVy0IAKDuYpmoKrztzh57r1DgKMS8cy_N9v9jKDK0_AMMbUtdn7UcnV4c5fsygZbHY27MIkFhaEpc6K0iU_HOrQ_D2Wdu6Qfmt4l__k7jFhuPP9tPx3v7UZ4iSqUBZ2e-Vot3Z3o8zuClAaQi4kkfRkiYfA4wyS2UAyr__j6SMf3ag7P5kavO_IhBb-ZwJn5xqya3km-7Zp-BbmpHLIVWZx3Sd6trZ2a0ydYp9H2UwQ91PJ6G62QuJFFMf2kpX4"
+            style="top: -5%; left: -2%; transform: rotate(-3deg);">
+        <img alt="Breaking Bad Poster" class="scattered-poster"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmxR8-qiHrWhp6a6p5HsiTb1qN8dwKg0h78QqxoxmnzgIUnlwzEbcC-BAIgPrRDVDT-dA01wnw7MEYmWBy0tCW2gRX6AIeN5ESzCe1RmMcbYl62mhnJ9SEejcEB8q02zE6o-tyts6aqjIFYPJIvQyIdrYcvDUnhZFGTtldmR5WHQPMtH111l9AZi-DjDI-0E9Y_aYl39r7tCH3SJ3nO1w7kwt9flVnSTe3fLbaRzZhBNH2NwK0JiLk8DgLw6eeRdwZLE-w4MdG098"
+            style="top: 15%; right: -5%; transform: rotate(4deg);">
+        <img alt="Dark Poster" class="scattered-poster"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUF9lwUg8lLKWSkx3mq6CVHYevS9hNtiudybP_ot2M4l2mzb8AkUTtZP0Bz7b5XvXfeVex8Yd0dUdJ81shzc6daQCgWeb7DVtOCJECPn4NpWPbPHDrzg576KssWbLGYP1NamuK6Tpy25Dj_UN7Um4MX__vxmVmkUNZ7B8rE5cCtKUbXAL-breBbwvKFTYsTtQ97gxmd7LqJw7uGSHwaZN7gYWYvPSmnss5wHg2cPnLFk6ddLAA1vj_gZRF2LWxwMf-_sK9gCn2xWY"
+            style="bottom: 10%; left: 10%; transform: rotate(-5deg);">
+        <img alt="Better Call Saul Poster" class="scattered-poster"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuD50I5kpgy26g2v0eQMJ4i6OenN08gYMf1ot_E8-fC-XrcD3wLbHxGCkuQGQXzo22EoctTswAKn8zhX6ZVs28cxGhHrdpQS1rMFR8Bq_HAvp-0BgZjXPco7hd2xwXtYQUrHAY3V_o2X-WaZQ62JX1m1LkmdALVsXHOb61Mz1wauV-n5g1EFinqXvd5QyFM0Il3NlRB5CNgg7yZ2mTk5q1RoM1zyFpzPqJZVNE_1n2rgWk-TSON1y2fTeG8dTwwPqKtJjXilvpwg9Do"
+            style="bottom: -8%; right: 15%; transform: rotate(2deg);">
+        <img alt="The Sopranos Poster" class="scattered-poster"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb716M6k36wKGekENKW6iGyIRzuwK_nhld9ir9kxTJtzn40tV07LMrKHoExkJgpJyIrM8JrL8bBcm8FAfbkA6UGOefG2nxTW1FIwSrvtYVaJxz7Pj382M-f__rIeuHSaZCakrb6jl58KF-ovnHS-d9BVVzfH3o5f8yX0yy3Fd7MrENCrTTLJVlRrYtrEcO6Xjh7hEhqgkWy3WIaBErKsIh0nEg_1je5XlPsJrkSwQ8f68RFfCn8kxUbnMVB4pIXh0kAG85J1rocC0"
+            style="top: 40%; left: 35%; transform: rotate(-2deg); width: 350px; opacity: 0.1;">
+        <img alt="House of the Dragon Poster" class="scattered-poster"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqbMNSGwy3xdljGpHPJp7lKhhnZvmulyau8M6VttXMWhSkUUbSW5MhV3FdZFexfZs8RK-ZvTikegtH-vwVf8Bd3cr1fAirtp-q5ovpxBUJyNPTVaHzHMdQpNMyNUtc8TG3Dm9MF9AngQyP4C5s03biuU5EhrlnaHBXxrk9FnO6hc2kSQU2vPYIZoQfq9ndLJSgmO2tDdyZBRUXjoojiKGKca0QbvRmEvySOrSSvdN-Rq1E5HgE9Dy09i3Znwn1Pm3JCPv2VGRQMqQ"
+            style="top: 5%; left: 50%; transform: rotate(5deg);">
+        <img alt="Knight Poster" class="scattered-poster"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBatcn3U8D7unVKb94Vi96H2aBHx4UxmeiE0BLvYytG0tHJ8sOfSY1GSWyzIQkbigeqXE68uyas-Q59TbWpndrmred5eYZA3jzOEi-yEgI7Xy3SPsQXyDrtZCXvcx-PkDZ8WChejskX8jnlsWPMAF3hBtX_WoTS7JofgRHzdrJDmDbhVuArlYuIWpvTSdYepNiXFP_IYO_0wMdI5yJz4Tr8StwqW71IA9Ix0_j8kEk5qDlRFOK3-VmHtOJ6HYMBtpxFFriwGAGEtd0"
+            style="bottom: 30%; right: 5%; transform: rotate(-4deg);">
+    </div>
+    <div class="bg-overlay-gradient"></div>
+
+    <!-- Main Content with Three Column Layout -->
+    <div class="relative flex min-h-screen flex-col items-center justify-center p-4 md:p-8">
+
+        <!-- Header -->
+        <!-- Header - FIX #5: Removed navigation links -->
+        <header class="w-full max-w-[1400px] flex items-center justify-center mb-8 px-4">
+            <div class="flex items-center gap-3">
+                <div class="size-8 bg-primary rounded-lg flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-xl">movie_filter</span>
+                </div>
+                <h2 class="text-xl font-bold tracking-tight">StreamPulse</h2>
+            </div>
+        </header>
+
+        <!-- Three Column Layout: Images | Form | Images -->
+        <div class="w-full max-w-[1400px] flex gap-8 items-start">
+
+            <!-- LEFT SIDE IMAGES (Hidden on mobile) -->
+            <aside class="hidden xl:flex flex-col gap-6 w-64 flex-shrink-0 sticky top-8">
+                <img src="/static/images/got.jpg" alt="Game of Thrones" class="side-image w-full h-80 object-cover">
+                <img src="/static/images/dark.jpg" alt="Dark" class="side-image w-full h-80 object-cover">
+                <img src="/static/images/sopranos.jpg" alt="The Sopranos" class="side-image w-full h-80 object-cover">
+            </aside>
+
+            <!-- CENTER FORM CONTENT -->
+            <main class="flex-1 max-w-3xl mx-auto">
+                <div class="glass-container rounded-xl p-6 md:p-10 shadow-2xl relative z-10">
+
+                    <!-- Title Section -->
+                    <div class="mb-10 text-center md:text-left">
+                        <h1 class="text-3xl md:text-4xl font-bold mb-3 tracking-tight">Web Series Popularity Survey</h1>
+                        <p class="text-zinc-400 text-base">Share your streaming habits and help us rank the greatest
+                            shows of our generation.</p>
+                    </div>
+
+                    <!-- Form -->
+                    <form action="/submit" method="POST" class="space-y-12">
+
+                        <!-- Personal Information Section -->
+                        <section>
+                            <div class="flex items-center gap-2 mb-6 border-b border-white/10 pb-2">
+                                <span class="material-symbols-outlined text-primary">person</span>
+                                <h2 class="text-xl font-semibold">Personal Information</h2>
+                            </div>
+                            <div class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="flex flex-col gap-2">
+                                        <label class="text-zinc-300 text-sm font-medium">Full Name *</label>
+                                        <input name="name" required
+                                            class="bg-black/40 border border-zinc-700/50 rounded-lg h-12 px-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-zinc-600 text-white"
+                                            placeholder="Tony Soprano" type="text">
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label class="text-zinc-300 text-sm font-medium">Date of Birth *</label>
+                                        <input name="dob" required
+                                            class="bg-black/40 border border-zinc-700/50 rounded-lg h-12 px-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-zinc-300"
+                                            type="date">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="flex flex-col gap-2">
+                                        <label class="text-zinc-300 text-sm font-medium">Department *</label>
+                                        <select name="department" required
+                                            class="bg-black/40 border border-zinc-700/50 rounded-lg h-12 px-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none text-zinc-300">
+                                            <option value="">Select Department</option>
+                                            <option value="Computer Science">Computer Science</option>
+                                            <option value="Information Technology">Information Technology</option>
+                                            <option value="Electronics & Communication">Electronics & Communication
+                                            </option>
+                                            <option value="Electrical Engineering">Electrical Engineering</option>
+                                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                            <option value="Civil Engineering">Civil Engineering</option>
+                                            <option value="Business Administration">Business Administration</option>
+                                            <option value="Commerce">Commerce</option>
+                                            <option value="Arts & Humanities">Arts & Humanities</option>
+                                            <option value="Science">Science</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label class="text-zinc-300 text-sm font-medium">College Name *</label>
+                                        <input name="college_name" required
+                                            class="bg-black/40 border border-zinc-700/50 rounded-lg h-12 px-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-zinc-600 text-white"
+                                            placeholder="Your college name" type="text">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="flex flex-col gap-2">
+                                        <label class="text-zinc-300 text-sm font-medium">Region / State *</label>
+                                        <select name="region" required
+                                            class="bg-black/40 border border-zinc-700/50 rounded-lg h-12 px-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none text-zinc-300">
+                                            <option value="">Select State</option>
+                                            <option value="Tamil Nadu">Tamil Nadu</option>
+                                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                            <option value="Karnataka">Karnataka</option>
+                                            <option value="Kerala">Kerala</option>
+                                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                            <option value="Telangana">Telangana</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label class="text-zinc-300 text-sm font-medium">City *</label>
+                                        <input name="city" required
+                                            class="bg-black/40 border border-zinc-700/50 rounded-lg h-12 px-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-zinc-600 text-white"
+                                            placeholder="Your city" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Demographic Preferences Section -->
+                        <section>
+                            <div class="flex items-center gap-2 mb-6 border-b border-white/10 pb-2">
+                                <span class="material-symbols-outlined text-primary">public</span>
+                                <h2 class="text-xl font-semibold">Demographic Preferences</h2>
+                            </div>
+                            <div class="space-y-8">
+                                <div class="flex flex-col gap-4">
+                                    <p class="text-zinc-300 text-sm font-medium">Does your region/state influence the
+                                        type of web series you prefer? *</p>
+                                    <div class="flex flex-wrap gap-4">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="regional_influence" value="Yes" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Yes</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="regional_influence" value="No" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">No</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="regional_influence" value="Not sure" type="radio">
+                                            <span class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Not
+                                                sure</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-4">
+                                    <p class="text-zinc-300 text-sm font-medium">Do you mostly watch web series in: *
+                                    </p>
+                                    <div class="flex flex-wrap gap-4">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="language_preference" value="English" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">English</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="language_preference" value="Regional language" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Regional
+                                                language</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="language_preference" value="Both" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Both</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-4">
+                                    <p class="text-zinc-300 text-sm font-medium">Do you think your college environment
+                                        or department affects your web-series choices? *</p>
+                                    <div class="flex flex-wrap gap-4">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="college_influence" value="Yes" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Yes</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="college_influence" value="No" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">No</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="college_influence" value="Maybe" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Maybe</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Streaming Preferences Section -->
+                        <section>
+                            <div class="flex items-center gap-2 mb-6 border-b border-white/10 pb-2">
+                                <span class="material-symbols-outlined text-primary">visibility</span>
+                                <h2 class="text-xl font-semibold">Streaming Preferences</h2>
+                            </div>
+                            <div class="space-y-8">
+                                <div class="flex flex-col gap-4">
+                                    <p class="text-zinc-300 text-sm font-medium">How often do you watch web series? *
+                                    </p>
+                                    <div class="flex flex-wrap gap-4">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="watch_frequency" value="Daily" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Daily</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="watch_frequency" value="Weekly" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Weekly</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="watch_frequency" value="Occasionally" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Occasionally</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="watch_frequency" value="Rarely" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Rarely</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-4">
+                                    <p class="text-zinc-300 text-sm font-medium">Which streaming platform do you use
+                                        MOST for web series? *</p>
+                                    <div class="flex flex-wrap gap-4">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="streaming_platform" value="Netflix" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Netflix</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="streaming_platform" value="Amazon Prime Video" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Amazon
+                                                Prime</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="streaming_platform" value="Disney+ Hotstar" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Disney+
+                                                Hotstar</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="streaming_platform" value="HBO" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">HBO</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="streaming_platform" value="Others" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Others</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-4">
+                                    <p class="text-zinc-300 text-sm font-medium">Which of the following web series have
+                                        you watched? (Select all that apply)</p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <label
+                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all">
+                                            <input name="series_watched" value="Game of Thrones"
+                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                type="checkbox">
+                                            <span class="text-zinc-300 text-sm">Game of Thrones</span>
+                                        </label>
+                                        <label
+                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all">
+                                            <input name="series_watched" value="Breaking Bad"
+                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                type="checkbox">
+                                            <span class="text-zinc-300 text-sm">Breaking Bad</span>
+                                        </label>
+                                        <label
+                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all">
+                                            <input name="series_watched" value="Better Call Saul"
+                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                type="checkbox">
+                                            <span class="text-zinc-300 text-sm">Better Call Saul</span>
+                                        </label>
+                                        <label
+                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all">
+                                            <input name="series_watched" value="The Sopranos"
+                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                type="checkbox">
+                                            <span class="text-zinc-300 text-sm">The Sopranos</span>
+                                        </label>
+                                        <label
+                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all">
+                                            <input name="series_watched" value="Dark"
+                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                type="checkbox">
+                                            <span class="text-zinc-300 text-sm">Dark</span>
+                                        </label>
+                                        <label
+                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all">
+                                            <input name="series_watched" value="House of the Dragon"
+                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                type="checkbox">
+                                            <span class="text-zinc-300 text-sm">House of the Dragon</span>
+                                        </label>
+                                        <!-- FIX #2: Increased checkbox card width to prevent text wrapping -->
+                                        <label
+                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all md:col-span-2">
+                                            <input name="series_watched" value="A Knight of the Seven Kingdoms"
+                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                type="checkbox">
+                                            <span class="text-zinc-300 text-sm">A Knight of the Seven Kingdoms</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-4">
+                                    <p class="text-zinc-300 text-sm font-medium">Which web series is your MOST favorite
+                                        among these? *</p>
+                                    <!-- FIX #2: Changed to grid layout for better spacing and prevent text cutoff -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="favorite_series" value="Game of Thrones" type="radio">
+                                            <span class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Game
+                                                of Thrones</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="favorite_series" value="Breaking Bad" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Breaking
+                                                Bad</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="favorite_series" value="Better Call Saul" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Better
+                                                Call Saul</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="favorite_series" value="The Sopranos" type="radio">
+                                            <span class="text-zinc-400 group-hover:text-zinc-200 transition-colors">The
+                                                Sopranos</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="favorite_series" value="Dark" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Dark</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="favorite_series" value="House of the Dragon" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">House
+                                                of the Dragon</span>
+                                        </label>
+                                        <!-- FIX #2: Full width for long text -->
+                                        <label class="flex items-center gap-2 cursor-pointer group sm:col-span-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="favorite_series" value="A Knight of the Seven Kingdoms"
+                                                type="radio">
+                                            <span class="text-zinc-400 group-hover:text-zinc-200 transition-colors">A
+                                                Knight of the Seven Kingdoms</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Series Ratings Section -->
+                        <section>
+                            <div class="flex items-center gap-2 mb-6 border-b border-white/10 pb-2">
+                                <span class="material-symbols-outlined text-primary">stars</span>
+                                <h2 class="text-xl font-semibold">Series Ratings</h2>
+                            </div>
+                            <div class="space-y-8">
+                                <!-- Game of Thrones Rating -->
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-zinc-300 text-sm font-medium">Rate Game of Thrones *</label>
+                                        <span
+                                            class="px-2 py-1 bg-primary/20 text-primary rounded text-xs font-bold">1-5</span>
+                                    </div>
+                                    <!-- FIX #2: Improved grid layout for better spacing -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 max-w-3xl">
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_got" value="1" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">1
+                                                - Poor</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_got" value="2" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">2</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_got" value="3" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">3
+                                                - Average</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_got" value="4" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">4</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_got" value="5" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">5
+                                                - Excellent</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- Breaking Bad Rating -->
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-zinc-300 text-sm font-medium">Rate Breaking Bad *</label>
+                                        <span
+                                            class="px-2 py-1 bg-primary/20 text-primary rounded text-xs font-bold">1-5</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_bb" value="1" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">1
+                                                - Poor</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_bb" value="2" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">2</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_bb" value="3" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">3
+                                                - Average</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_bb" value="4" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">4</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_bb" value="5" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">5
+                                                - Excellent</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- Better Call Saul Rating -->
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-zinc-300 text-sm font-medium">Rate Better Call Saul *</label>
+                                        <span
+                                            class="px-2 py-1 bg-primary/20 text-primary rounded text-xs font-bold">1-5</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-x-4 gap-y-3">
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_bcs" value="1" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">1
+                                                - Poor</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_bcs" value="2" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">2</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_bcs" value="3" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">3
+                                                - Average</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_bcs" value="4" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">4</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_bcs" value="5" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">5
+                                                - Excellent</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- Dark Rating -->
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-zinc-300 text-sm font-medium">Rate Dark *</label>
+                                        <span
+                                            class="px-2 py-1 bg-primary/20 text-primary rounded text-xs font-bold">1-5</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-x-4 gap-y-3">
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_dark" value="1" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">1
+                                                - Poor</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_dark" value="2" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">2</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_dark" value="3" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">3
+                                                - Average</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_dark" value="4" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">4</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_dark" value="5" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">5
+                                                - Excellent</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- FIX #3: The Sopranos Rating -->
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-zinc-300 text-sm font-medium">Rate The Sopranos *</label>
+                                        <span
+                                            class="px-2 py-1 bg-primary/20 text-primary rounded text-xs font-bold">1-5</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_sopranos" value="1" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">1
+                                                - Poor</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_sopranos" value="2" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">2</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_sopranos" value="3" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">3
+                                                - Average</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_sopranos" value="4" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">4</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_sopranos" value="5" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">5
+                                                - Excellent</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- FIX #3: House of the Dragon Rating -->
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-zinc-300 text-sm font-medium">Rate House of the Dragon
+                                            *</label>
+                                        <span
+                                            class="px-2 py-1 bg-primary/20 text-primary rounded text-xs font-bold">1-5</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_hotd" value="1" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">1
+                                                - Poor</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_hotd" value="2" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">2</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_hotd" value="3" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">3
+                                                - Average</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_hotd" value="4" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">4</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_hotd" value="5" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">5
+                                                - Excellent</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- FIX #3: A Knight of the Seven Kingdoms Rating -->
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-zinc-300 text-sm font-medium">Rate A Knight of the Seven
+                                            Kingdoms *</label>
+                                        <span
+                                            class="px-2 py-1 bg-primary/20 text-primary rounded text-xs font-bold">1-5</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_knight" value="1" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">1
+                                                - Poor</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_knight" value="2" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">2</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_knight" value="3" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">3
+                                                - Average</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_knight" value="4" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">4</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_knight" value="5" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">5
+                                                - Excellent</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Final Preferences Section -->
+                        <section>
+                            <div class="flex items-center gap-2 mb-6 border-b border-white/10 pb-2">
+                                <span class="material-symbols-outlined text-primary">tune</span>
+                                <h2 class="text-xl font-semibold">Final Preferences</h2>
+                            </div>
+                            <div class="space-y-8">
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-zinc-300 text-sm font-medium">Which genre do you MOST enjoy in
+                                        web series? *</label>
+                                    <select name="genre_preference" required
+                                        class="bg-black/40 border border-zinc-700/50 rounded-lg h-12 px-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none text-zinc-300">
+                                        <option value="">Select Genre</option>
+                                        <option value="Fantasy">Fantasy</option>
+                                        <option value="Crime">Crime</option>
+                                        <option value="Thriller">Thriller</option>
+                                        <option value="Drama">Drama</option>
+                                        <option value="Sci-Fi">Sci-Fi</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-zinc-300 text-sm font-medium">Which web series has the BEST
+                                        storytelling according to you? *</label>
+                                    <select name="best_storytelling" required
+                                        class="bg-black/40 border border-zinc-700/50 rounded-lg h-12 px-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none text-zinc-300">
+                                        <option value="">Select Series</option>
+                                        <option value="Game of Thrones">Game of Thrones</option>
+                                        <option value="Breaking Bad">Breaking Bad</option>
+                                        <option value="Better Call Saul">Better Call Saul</option>
+                                        <option value="The Sopranos">The Sopranos</option>
+                                        <option value="Dark">Dark</option>
+                                        <option value="House of the Dragon">House of the Dragon</option>
+                                        <option value="A Knight of the Seven Kingdoms">A Knight of the Seven Kingdoms
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-zinc-300 text-sm font-medium">Which web series would you MOST
+                                        recommend to others? *</label>
+                                    <select name="most_recommended" required
+                                        class="bg-black/40 border border-zinc-700/50 rounded-lg h-12 px-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none text-zinc-300">
+                                        <option value="">Select Series</option>
+                                        <option value="Game of Thrones">Game of Thrones</option>
+                                        <option value="Breaking Bad">Breaking Bad</option>
+                                        <option value="Better Call Saul">Better Call Saul</option>
+                                        <option value="The Sopranos">The Sopranos</option>
+                                        <option value="Dark">Dark</option>
+                                        <option value="House of the Dragon">House of the Dragon</option>
+                                        <option value="A Knight of the Seven Kingdoms">A Knight of the Seven Kingdoms
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-4">
+                                    <p class="text-zinc-300 text-sm font-medium">What factor matters MOST to you in a
+                                        web series? *</p>
+                                    <div class="flex flex-wrap gap-4">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="important_factor" value="Storyline" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Storyline</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="important_factor" value="Characters" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Characters</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="important_factor" value="Acting" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Acting</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="important_factor" value="Visuals" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Visuals</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                name="important_factor" value="Ending" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Ending</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Submit Button -->
+                        <div class="pt-6">
+                            <button
+                                class="w-full bg-gradient-to-r from-primary to-[#8b0000] hover:from-[#ff1a1a] hover:to-primary text-white font-bold py-4 rounded-xl shadow-[0_10px_30px_rgba(236,19,19,0.3)] transition-all transform active:scale-[0.98] uppercase tracking-wider text-sm"
+                                type="submit">
+                                Submit Survey
+                            </button>
+                            <p class="text-center text-zinc-500 text-xs mt-4">Estimated time: 3-4 minutes. Your data is
+                                protected.</p>
+                        </div>
+                    </form>
+                </div>
+            </main>
+
+            <!-- RIGHT SIDE IMAGES (Hidden on mobile) -->
+            <aside class="hidden xl:flex flex-col gap-6 w-64 flex-shrink-0 sticky top-8">
+                <img src="/static/images/bb.jpg" alt="Breaking Bad" class="side-image w-full h-80 object-cover">
+                <img src="/static/images/bcs.jpg" alt="Better Call Saul" class="side-image w-full h-80 object-cover">
+                <img src="/static/images/hotd.jpg" alt="House of the Dragon"
+                    class="side-image w-full h-80 object-cover">
+            </aside>
+
+        </div>
+
+        <!-- Footer - FIX #4: Simplified and centered -->
+        <footer
+            class="w-full max-w-[1400px] flex items-center justify-center mt-12 mb-8 px-4 text-zinc-500 text-xs border-t border-white/5 pt-8">
+            <p>© 2026 StreamPulse Analytics. All rights reserved.</p>
+        </footer>
+    </div>
+
+</body>
+
+</html>

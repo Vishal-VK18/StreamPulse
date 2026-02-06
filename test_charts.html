@@ -1,0 +1,91 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Survey Analytics</title>
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    min-height: 100vh;
+                    margin: 0;
+                    padding: 20px;
+                }
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    background: white;
+                    border-radius: 15px;
+                    padding: 40px;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                }
+                h1 {
+                    text-align: center;
+                    color: #667eea;
+                    margin-bottom: 10px;
+                }
+                .stats {
+                    text-align: center;
+                    color: #555;
+                    margin-bottom: 30px;
+                    font-size: 18px;
+                }
+                .chart {
+                    margin: 30px 0;
+                    text-align: center;
+                }
+                .chart img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                }
+                .btn {
+                    display: inline-block;
+                    margin: 20px 10px;
+                    padding: 12px 30px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 25px;
+                    font-size: 16px;
+                    transition: transform 0.2s;
+                }
+                .btn:hover {
+                    transform: translateY(-2px);
+                }
+                .buttons {
+                    text-align: center;
+                    margin-top: 30px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>📊 Survey Analytics Dashboard</h1>
+                <div class="stats">
+                    <strong>Total Responses:</strong> 8
+                </div>
+                
+                <div class="chart">
+                    <img src="/static/charts/favorite_series.png" alt="Favorite Series">
+                </div>
+                
+                <div class="chart">
+                    <img src="/static/charts/average_ratings.png" alt="Average Ratings">
+                </div>
+                
+                <div class="chart">
+                    <img src="/static/charts/genre_distribution.png" alt="Genre Distribution">
+                </div>
+                
+                <div class="buttons">
+                    <a href="/" class="btn">Back to Survey</a>
+                    <a href="/charts" class="btn">Refresh Charts</a>
+                </div>
+            </div>
+        </body>
+        </html>
+        
