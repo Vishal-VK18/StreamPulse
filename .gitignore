@@ -38,6 +38,9 @@ instance/
 .DS_Store
 Thumbs.db
 
+# Data files (survey responses - ephemeral on Render)
+data.csv
+
 # Charts (these will be regenerated)
 static/charts/*.png
 

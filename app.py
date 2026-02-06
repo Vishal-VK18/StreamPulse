@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request, redirect, url_for
 import csv
 import os
 import matplotlib
@@ -65,38 +65,39 @@ def submit():
         # Ensure CSV file exists with headers before writing
         ensure_csv_exists()
         
-        # Extract form data
-        data = {
-            'name': request.form.get('name', ''),
-            'dob': request.form.get('dob', ''),
-            'department': request.form.get('department', ''),
-            'college_name': request.form.get('college_name', ''),
-            'region': request.form.get('region', ''),
-            'city': request.form.get('city', ''),
-            'regional_influence': request.form.get('regional_influence', ''),
-            'language_preference': request.form.get('language_preference', ''),
-            'college_influence': request.form.get('college_influence', ''),
-            'watch_frequency': request.form.get('watch_frequency', ''),
-            'streaming_platform': request.form.get('streaming_platform', ''),
-            'series_watched': ', '.join(request.form.getlist('series_watched')),  # Multiple checkboxes
-            'favorite_series': request.form.get('favorite_series', ''),
-            'rating_got': request.form.get('rating_got', ''),
-            'rating_bb': request.form.get('rating_bb', ''),
-            'rating_bcs': request.form.get('rating_bcs', ''),
-            'rating_dark': request.form.get('rating_dark', ''),
-            'rating_sopranos': request.form.get('rating_sopranos', ''),
-            'rating_hotd': request.form.get('rating_hotd', ''),
-            'rating_knight': request.form.get('rating_knight', ''),
-            'genre_preference': request.form.get('genre_preference', ''),
-            'best_storytelling': request.form.get('best_storytelling', ''),
-            'most_recommended': request.form.get('most_recommended', ''),
-            'important_factor': request.form.get('important_factor', '')
-        }
+        # Extract form data with explicit int conversion for ratings
+        data = [
+            request.form.get('name', ''),
+            request.form.get('dob', ''),
+            request.form.get('department', ''),
+            request.form.get('college_name', ''),
+            request.form.get('region', ''),
+            request.form.get('city', ''),
+            request.form.get('regional_influence', ''),
+            request.form.get('language_preference', ''),
+            request.form.get('college_influence', ''),
+            request.form.get('watch_frequency', ''),
+            request.form.get('streaming_platform', ''),
+            ', '.join(request.form.getlist('series_watched')),  # Multiple checkboxes
+            request.form.get('favorite_series', ''),
+            # Convert ratings to pure integers (1-5) for Excel compatibility
+            int(request.form.get('rating_got', 0)) if request.form.get('rating_got') else '',
+            int(request.form.get('rating_bb', 0)) if request.form.get('rating_bb') else '',
+            int(request.form.get('rating_bcs', 0)) if request.form.get('rating_bcs') else '',
+            int(request.form.get('rating_dark', 0)) if request.form.get('rating_dark') else '',
+            int(request.form.get('rating_sopranos', 0)) if request.form.get('rating_sopranos') else '',
+            int(request.form.get('rating_hotd', 0)) if request.form.get('rating_hotd') else '',
+            int(request.form.get('rating_knight', 0)) if request.form.get('rating_knight') else '',
+            request.form.get('genre_preference', ''),
+            request.form.get('best_storytelling', ''),
+            request.form.get('most_recommended', ''),
+            request.form.get('important_factor', '')
+        ]
         
         # Append data to CSV (headers already exist from ensure_csv_exists)
         with open(CSV_FILE, 'a', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
-            writer.writerow(data.values())
+            writer.writerow(data)
         
         return redirect(url_for('success'))
     
@@ -252,14 +253,15 @@ def charts():
         
         # Chart 2: Average Rating Per Series (Bar Chart)
         plt.figure(figsize=(12, 6))
+        # Convert ratings to numeric, replacing errors with NaN for accurate averages
         series_ratings = {
-            'Game of Thrones': df['rating_got'].astype(float).mean(),
-            'Breaking Bad': df['rating_bb'].astype(float).mean(),
-            'Better Call Saul': df['rating_bcs'].astype(float).mean(),
-            'Dark': df['rating_dark'].astype(float).mean(),
-            'The Sopranos': df['rating_sopranos'].astype(float).mean(),
-            'House of the Dragon': df['rating_hotd'].astype(float).mean(),
-            'A Knight of the Seven Kingdoms': df['rating_knight'].astype(float).mean()
+            'Game of Thrones': pd.to_numeric(df['rating_got'], errors='coerce').mean(),
+            'Breaking Bad': pd.to_numeric(df['rating_bb'], errors='coerce').mean(),
+            'Better Call Saul': pd.to_numeric(df['rating_bcs'], errors='coerce').mean(),
+            'Dark': pd.to_numeric(df['rating_dark'], errors='coerce').mean(),
+            'The Sopranos': pd.to_numeric(df['rating_sopranos'], errors='coerce').mean(),
+            'House of the Dragon': pd.to_numeric(df['rating_hotd'], errors='coerce').mean(),
+            'A Knight of the Seven Kingdoms': pd.to_numeric(df['rating_knight'], errors='coerce').mean()
         }
         plt.bar(series_ratings.keys(), series_ratings.values(), color='#764ba2')
         plt.xlabel('Web Series', fontsize=12, fontweight='bold')
