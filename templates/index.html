@@ -507,13 +507,26 @@
                                                 type="checkbox">
                                             <span class="text-zinc-300 text-sm">House of the Dragon</span>
                                         </label>
-                                        <!-- FIX #2: Increased checkbox card width to prevent text wrapping -->
                                         <label
-                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all md:col-span-2">
-                                            <input name="series_watched" value="A Knight of the Seven Kingdoms"
-                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all">
+                                            <input name="series_watched" value="Dexter"
+                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary"
                                                 type="checkbox">
-                                            <span class="text-zinc-300 text-sm">A Knight of the Seven Kingdoms</span>
+                                            <span class="text-zinc-300 text-sm">Dexter</span>
+                                        </label>
+                                        <label
+                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all">
+                                            <input name="series_watched" value="Vikings"
+                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                type="checkbox">
+                                            <span class="text-zinc-300 text-sm">Vikings</span>
+                                        </label>
+                                        <label
+                                            class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-transparent hover:border-white/20 cursor-pointer transition-all">
+                                            <input name="series_watched" value="Twin Peaks"
+                                                class="w-5 h-5 rounded border-zinc-700 bg-black/40 text-primary focus:ring-primary"
+                                                type="checkbox">
+                                            <span class="text-zinc-300 text-sm">Twin Peaks</span>
                                         </label>
                                     </div>
                                 </div>
@@ -567,14 +580,26 @@
                                                 class="text-zinc-400 group-hover:text-zinc-200 transition-colors">House
                                                 of the Dragon</span>
                                         </label>
-                                        <!-- FIX #2: Full width for long text -->
-                                        <label class="flex items-center gap-2 cursor-pointer group sm:col-span-2">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
                                             <input
                                                 class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
-                                                name="favorite_series" value="A Knight of the Seven Kingdoms"
-                                                type="radio">
-                                            <span class="text-zinc-400 group-hover:text-zinc-200 transition-colors">A
-                                                Knight of the Seven Kingdoms</span>
+                                                name="favorite_series" value="Dexter" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Dexter</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="favorite_series" value="Vikings" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Vikings</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="favorite_series" value="Twin Peaks" type="radio">
+                                            <span class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Twin
+                                                Peaks</span>
                                         </label>
                                     </div>
                                 </div>
@@ -878,11 +903,10 @@
                                         </label>
                                     </div>
                                 </div>
-                                <!-- FIX #3: A Knight of the Seven Kingdoms Rating -->
+                                <!-- Dexter Rating -->
                                 <div class="flex flex-col gap-4">
                                     <div class="flex justify-between items-center">
-                                        <label class="text-zinc-300 text-sm font-medium">Rate A Knight of the Seven
-                                            Kingdoms *</label>
+                                        <label class="text-zinc-300 text-sm font-medium">Rate Dexter *</label>
                                         <span
                                             class="px-2 py-1 bg-primary/20 text-primary rounded text-xs font-bold">1-5</span>
                                     </div>
@@ -890,7 +914,7 @@
                                         <label class="flex items-center gap-2 cursor-pointer group py-2">
                                             <input required
                                                 class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
-                                                name="rating_knight" value="1" type="radio">
+                                                name="rating_dexter" value="1" type="radio">
                                             <span
                                                 class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">1
                                                 - Poor</span>
@@ -898,14 +922,14 @@
                                         <label class="flex items-center gap-2 cursor-pointer group py-2">
                                             <input
                                                 class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
-                                                name="rating_knight" value="2" type="radio">
+                                                name="rating_dexter" value="2" type="radio">
                                             <span
                                                 class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">2</span>
                                         </label>
                                         <label class="flex items-center gap-2 cursor-pointer group py-2">
                                             <input
                                                 class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
-                                                name="rating_knight" value="3" type="radio">
+                                                name="rating_dexter" value="3" type="radio">
                                             <span
                                                 class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">3
                                                 - Average</span>
@@ -913,14 +937,110 @@
                                         <label class="flex items-center gap-2 cursor-pointer group py-2">
                                             <input
                                                 class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
-                                                name="rating_knight" value="4" type="radio">
+                                                name="rating_dexter" value="4" type="radio">
                                             <span
                                                 class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">4</span>
                                         </label>
                                         <label class="flex items-center gap-2 cursor-pointer group py-2">
                                             <input
                                                 class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
-                                                name="rating_knight" value="5" type="radio">
+                                                name="rating_dexter" value="5" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">5
+                                                - Excellent</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- Vikings Rating -->
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-zinc-300 text-sm font-medium">Rate Vikings *</label>
+                                        <span
+                                            class="px-2 py-1 bg-primary/20 text-primary rounded text-xs font-bold">1-5</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_vikings" value="1" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">1
+                                                - Poor</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_vikings" value="2" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">2</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_vikings" value="3" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">3
+                                                - Average</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_vikings" value="4" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">4</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_vikings" value="5" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">5
+                                                - Excellent</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- Twin Peaks Rating -->
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-zinc-300 text-sm font-medium">Rate Twin Peaks *</label>
+                                        <span
+                                            class="px-2 py-1 bg-primary/20 text-primary rounded text-xs font-bold">1-5</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input required
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_twinpeaks" value="1" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">1
+                                                - Poor</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_twinpeaks" value="2" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">2</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_twinpeaks" value="3" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">3
+                                                - Average</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_twinpeaks" value="4" type="radio">
+                                            <span
+                                                class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">4</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group py-2">
+                                            <input
+                                                class="w-4 h-4 border-zinc-700 bg-black/40 text-primary focus:ring-primary flex-shrink-0"
+                                                name="rating_twinpeaks" value="5" type="radio">
                                             <span
                                                 class="text-zinc-400 group-hover:text-zinc-200 transition-colors text-sm">5
                                                 - Excellent</span>
@@ -962,8 +1082,9 @@
                                         <option value="The Sopranos">The Sopranos</option>
                                         <option value="Dark">Dark</option>
                                         <option value="House of the Dragon">House of the Dragon</option>
-                                        <option value="A Knight of the Seven Kingdoms">A Knight of the Seven Kingdoms
-                                        </option>
+                                        <option value="Dexter">Dexter</option>
+                                        <option value="Vikings">Vikings</option>
+                                        <option value="Twin Peaks">Twin Peaks</option>
                                     </select>
                                 </div>
                                 <div class="flex flex-col gap-2">
@@ -978,8 +1099,9 @@
                                         <option value="The Sopranos">The Sopranos</option>
                                         <option value="Dark">Dark</option>
                                         <option value="House of the Dragon">House of the Dragon</option>
-                                        <option value="A Knight of the Seven Kingdoms">A Knight of the Seven Kingdoms
-                                        </option>
+                                        <option value="Dexter">Dexter</option>
+                                        <option value="Vikings">Vikings</option>
+                                        <option value="Twin Peaks">Twin Peaks</option>
                                     </select>
                                 </div>
                                 <div class="flex flex-col gap-4">

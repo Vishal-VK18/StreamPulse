@@ -39,7 +39,9 @@ CSV_HEADERS = [
     'rating_dark',
     'rating_sopranos',
     'rating_hotd',
-    'rating_knight',
+    'rating_dexter',
+    'rating_vikings',
+    'rating_twinpeaks',
     'genre_preference',
     'best_storytelling',
     'most_recommended',
@@ -49,9 +51,18 @@ CSV_HEADERS = [
 def ensure_csv_exists():
     """Create CSV with headers if it doesn't exist (called on every submission)"""
     if not os.path.exists(CSV_FILE):
-        with open(CSV_FILE, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            writer.writerow(CSV_HEADERS)
+        print(f"Creating new CSV file at: {CSV_FILE}")
+        try:
+            with open(CSV_FILE, 'w', newline='', encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(CSV_HEADERS)
+            print("✅ CSV created successfully with headers.")
+        except Exception as e:
+            print(f"❌ Error creating CSV: {e}")
+            raise e
+    else:
+        # Verify headers match if file exists (Optional but good for audit)
+        pass
 
 @app.route('/')
 def index():
@@ -87,7 +98,9 @@ def submit():
             int(request.form.get('rating_dark', 0)) if request.form.get('rating_dark') else '',
             int(request.form.get('rating_sopranos', 0)) if request.form.get('rating_sopranos') else '',
             int(request.form.get('rating_hotd', 0)) if request.form.get('rating_hotd') else '',
-            int(request.form.get('rating_knight', 0)) if request.form.get('rating_knight') else '',
+            int(request.form.get('rating_dexter', 0)) if request.form.get('rating_dexter') else '',
+            int(request.form.get('rating_vikings', 0)) if request.form.get('rating_vikings') else '',
+            int(request.form.get('rating_twinpeaks', 0)) if request.form.get('rating_twinpeaks') else '',
             request.form.get('genre_preference', ''),
             request.form.get('best_storytelling', ''),
             request.form.get('most_recommended', ''),
@@ -95,9 +108,19 @@ def submit():
         ]
         
         # Append data to CSV (headers already exist from ensure_csv_exists)
+        # Append data to CSV (headers already exist from ensure_csv_exists)
+        print(f"Attempting to write data to: {CSV_FILE}")
         with open(CSV_FILE, 'a', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow(data)
+        
+        print("✅ Data written directly to CSV.")
+        
+        # Developer Verification: Print row count
+        if os.path.exists(CSV_FILE):
+            with open(CSV_FILE, 'r', encoding='utf-8') as f:
+                row_count = sum(1 for row in f) - 1 # Subtract header
+            print(f"📊 Total rows in CSV now: {row_count}")
         
         return redirect(url_for('success'))
     
@@ -228,11 +251,15 @@ def charts():
             return "No data available yet. Please submit the survey first.", 404
         
         # Read CSV data with explicit path
+        print(f"Reading data for charts from: {CSV_FILE}")
         df = pd.read_csv(CSV_FILE)
         
         # Verify DataFrame has actual data rows
         if len(df) == 0:
+            print("⚠️ CSV exists but is empty (no data rows).")
             return "No data available yet. Please submit the survey first.", 404
+            
+        print(f"✅ Loaded {len(df)} rows for analytics.")
         
         # Clear previous charts
         for file in os.listdir(CHARTS_DIR):
@@ -261,7 +288,9 @@ def charts():
             'Dark': pd.to_numeric(df['rating_dark'], errors='coerce').mean(),
             'The Sopranos': pd.to_numeric(df['rating_sopranos'], errors='coerce').mean(),
             'House of the Dragon': pd.to_numeric(df['rating_hotd'], errors='coerce').mean(),
-            'A Knight of the Seven Kingdoms': pd.to_numeric(df['rating_knight'], errors='coerce').mean()
+            'Dexter': pd.to_numeric(df['rating_dexter'], errors='coerce').mean(),
+            'Vikings': pd.to_numeric(df['rating_vikings'], errors='coerce').mean(),
+            'Twin Peaks': pd.to_numeric(df['rating_twinpeaks'], errors='coerce').mean()
         }
         plt.bar(series_ratings.keys(), series_ratings.values(), color='#764ba2')
         plt.xlabel('Web Series', fontsize=12, fontweight='bold')
