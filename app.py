@@ -43,13 +43,15 @@ def submit():
             'Poor': 1,
             'Average': 3,
             'Excellent': 5,
-            'Not Watched Yet': 0
+            'Not Watched Yet': None
         }
         
         def get_rating(key):
             val = request.form.get(key)
             if val and val.isdigit():
-                return int(val)
+                i_val = int(val)
+                # Keep only valid ratings 1-5, convert 0 or others to None
+                return i_val if 1 <= i_val <= 5 else None
             return rating_map.get(val, None)
 
         # Extract form data
