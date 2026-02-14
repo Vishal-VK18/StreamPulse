@@ -38,6 +38,20 @@ def index():
 def submit():
     """Handle form submission and save to Supabase"""
     try:
+        # Define helper for rating conversion
+        rating_map = {
+            'Poor': 1,
+            'Average': 3,
+            'Excellent': 5,
+            'Not Watched Yet': 0
+        }
+        
+        def get_rating(key):
+            val = request.form.get(key)
+            if val and val.isdigit():
+                return int(val)
+            return rating_map.get(val, None)
+
         # Extract form data
         data = {
             'name': request.form.get('name', ''),
@@ -53,16 +67,18 @@ def submit():
             'streaming_platform': request.form.get('streaming_platform', ''),
             'series_watched': ', '.join(request.form.getlist('series_watched')),  # Multiple checkboxes
             'favorite_series': request.form.get('favorite_series', ''),
+            
             # Convert ratings to integers
-            'rating_got': int(request.form.get('rating_got', 0)) if request.form.get('rating_got') else None,
-            'rating_bb': int(request.form.get('rating_bb', 0)) if request.form.get('rating_bb') else None,
-            'rating_bcs': int(request.form.get('rating_bcs', 0)) if request.form.get('rating_bcs') else None,
-            'rating_dark': int(request.form.get('rating_dark', 0)) if request.form.get('rating_dark') else None,
-            'rating_sopranos': int(request.form.get('rating_sopranos', 0)) if request.form.get('rating_sopranos') else None,
-            'rating_hotd': int(request.form.get('rating_hotd', 0)) if request.form.get('rating_hotd') else None,
-            'rating_dexter': int(request.form.get('rating_dexter', 0)) if request.form.get('rating_dexter') else None,
-            'rating_vikings': int(request.form.get('rating_vikings', 0)) if request.form.get('rating_vikings') else None,
-            'rating_twinpeaks': int(request.form.get('rating_twinpeaks', 0)) if request.form.get('rating_twinpeaks') else None,
+            'rating_got': get_rating('rating_got'),
+            'rating_bb': get_rating('rating_bb'),
+            'rating_bcs': get_rating('rating_bcs'),
+            'rating_dark': get_rating('rating_dark'),
+            'rating_sopranos': get_rating('rating_sopranos'),
+            'rating_hotd': get_rating('rating_hotd'),
+            'rating_dexter': get_rating('rating_dexter'),
+            'rating_vikings': get_rating('rating_vikings'),
+            'rating_twinpeaks': get_rating('rating_twinpeaks'),
+            
             'genre_preference': request.form.get('genre_preference', ''),
             'best_storytelling': request.form.get('best_storytelling', ''),
             'most_recommended': request.form.get('most_recommended', ''),
