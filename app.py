@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.middleware.proxy_fix import ProxyFix
 import os
 from supabase import create_client, Client
 import matplotlib
@@ -8,6 +9,8 @@ import pandas as pd
 from collections import Counter
 
 app = Flask(__name__)
+# Fix for Render/Railway: wrappers the app to trust X-Forwarded-Headers
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 # Configuration - Use absolute paths for Render compatibility
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
