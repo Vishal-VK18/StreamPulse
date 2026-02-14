@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
-import csv
 import os
+from supabase import create_client, Client
 import matplotlib
 matplotlib.use('Agg')  # Non-interactive backend for server environments
 import matplotlib.pyplot as plt
@@ -11,58 +11,23 @@ app = Flask(__name__)
 
 # Configuration - Use absolute paths for Render compatibility
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CSV_FILE = os.path.join(BASE_DIR, 'data.csv')
 CHARTS_DIR = os.path.join(BASE_DIR, 'static', 'charts')
+
+# Supabase Setup
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+
+if not SUPABASE_URL or not SUPABASE_KEY:
+    raise ValueError("Missing SUPABASE_URL or SUPABASE_KEY environment variables.")
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Ensure directories exist
 os.makedirs(os.path.join(BASE_DIR, 'templates'), exist_ok=True)
 os.makedirs(CHARTS_DIR, exist_ok=True)
 
 # CSV header definition
-CSV_HEADERS = [
-    'name',
-    'dob',
-    'department',
-    'college_name',
-    'region',
-    'city',
-    'regional_influence',
-    'language_preference',
-    'college_influence',
-    'watch_frequency',
-    'streaming_platform',
-    'series_watched',
-    'favorite_series',
-    'rating_got',
-    'rating_bb',
-    'rating_bcs',
-    'rating_dark',
-    'rating_sopranos',
-    'rating_hotd',
-    'rating_dexter',
-    'rating_vikings',
-    'rating_twinpeaks',
-    'genre_preference',
-    'best_storytelling',
-    'most_recommended',
-    'important_factor'
-]
 
-def ensure_csv_exists():
-    """Create CSV with headers if it doesn't exist (called on every submission)"""
-    if not os.path.exists(CSV_FILE):
-        print(f"Creating new CSV file at: {CSV_FILE}")
-        try:
-            with open(CSV_FILE, 'w', newline='', encoding='utf-8') as f:
-                writer = csv.writer(f)
-                writer.writerow(CSV_HEADERS)
-            print("✅ CSV created successfully with headers.")
-        except Exception as e:
-            print(f"❌ Error creating CSV: {e}")
-            raise e
-    else:
-        # Verify headers match if file exists (Optional but good for audit)
-        pass
 
 @app.route('/')
 def index():
@@ -71,60 +36,48 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    """Handle form submission and save to CSV"""
+    """Handle form submission and save to Supabase"""
     try:
-        # Ensure CSV file exists with headers before writing
-        ensure_csv_exists()
+        # Extract form data
+        data = {
+            'name': request.form.get('name', ''),
+            'dob': request.form.get('dob', ''),
+            'department': request.form.get('department', ''),
+            'college_name': request.form.get('college_name', ''),
+            'region': request.form.get('region', ''),
+            'city': request.form.get('city', ''),
+            'regional_influence': request.form.get('regional_influence', ''),
+            'language_preference': request.form.get('language_preference', ''),
+            'college_influence': request.form.get('college_influence', ''),
+            'watch_frequency': request.form.get('watch_frequency', ''),
+            'streaming_platform': request.form.get('streaming_platform', ''),
+            'series_watched': ', '.join(request.form.getlist('series_watched')),  # Multiple checkboxes
+            'favorite_series': request.form.get('favorite_series', ''),
+            # Convert ratings to integers
+            'rating_got': int(request.form.get('rating_got', 0)) if request.form.get('rating_got') else None,
+            'rating_bb': int(request.form.get('rating_bb', 0)) if request.form.get('rating_bb') else None,
+            'rating_bcs': int(request.form.get('rating_bcs', 0)) if request.form.get('rating_bcs') else None,
+            'rating_dark': int(request.form.get('rating_dark', 0)) if request.form.get('rating_dark') else None,
+            'rating_sopranos': int(request.form.get('rating_sopranos', 0)) if request.form.get('rating_sopranos') else None,
+            'rating_hotd': int(request.form.get('rating_hotd', 0)) if request.form.get('rating_hotd') else None,
+            'rating_dexter': int(request.form.get('rating_dexter', 0)) if request.form.get('rating_dexter') else None,
+            'rating_vikings': int(request.form.get('rating_vikings', 0)) if request.form.get('rating_vikings') else None,
+            'rating_twinpeaks': int(request.form.get('rating_twinpeaks', 0)) if request.form.get('rating_twinpeaks') else None,
+            'genre_preference': request.form.get('genre_preference', ''),
+            'best_storytelling': request.form.get('best_storytelling', ''),
+            'most_recommended': request.form.get('most_recommended', ''),
+            'important_factor': request.form.get('important_factor', '')
+        }
         
-        # Extract form data with explicit int conversion for ratings
-        data = [
-            request.form.get('name', ''),
-            request.form.get('dob', ''),
-            request.form.get('department', ''),
-            request.form.get('college_name', ''),
-            request.form.get('region', ''),
-            request.form.get('city', ''),
-            request.form.get('regional_influence', ''),
-            request.form.get('language_preference', ''),
-            request.form.get('college_influence', ''),
-            request.form.get('watch_frequency', ''),
-            request.form.get('streaming_platform', ''),
-            ', '.join(request.form.getlist('series_watched')),  # Multiple checkboxes
-            request.form.get('favorite_series', ''),
-            # Convert ratings to pure integers (1-5) for Excel compatibility
-            int(request.form.get('rating_got', 0)) if request.form.get('rating_got') else '',
-            int(request.form.get('rating_bb', 0)) if request.form.get('rating_bb') else '',
-            int(request.form.get('rating_bcs', 0)) if request.form.get('rating_bcs') else '',
-            int(request.form.get('rating_dark', 0)) if request.form.get('rating_dark') else '',
-            int(request.form.get('rating_sopranos', 0)) if request.form.get('rating_sopranos') else '',
-            int(request.form.get('rating_hotd', 0)) if request.form.get('rating_hotd') else '',
-            int(request.form.get('rating_dexter', 0)) if request.form.get('rating_dexter') else '',
-            int(request.form.get('rating_vikings', 0)) if request.form.get('rating_vikings') else '',
-            int(request.form.get('rating_twinpeaks', 0)) if request.form.get('rating_twinpeaks') else '',
-            request.form.get('genre_preference', ''),
-            request.form.get('best_storytelling', ''),
-            request.form.get('most_recommended', ''),
-            request.form.get('important_factor', '')
-        ]
+        # Insert data into Supabase
+        response = supabase.table("survey_responses").insert(data).execute()
         
-        # Append data to CSV (headers already exist from ensure_csv_exists)
-        # Append data to CSV (headers already exist from ensure_csv_exists)
-        print(f"Attempting to write data to: {CSV_FILE}")
-        with open(CSV_FILE, 'a', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            writer.writerow(data)
-        
-        print("✅ Data written directly to CSV.")
-        
-        # Developer Verification: Print row count
-        if os.path.exists(CSV_FILE):
-            with open(CSV_FILE, 'r', encoding='utf-8') as f:
-                row_count = sum(1 for row in f) - 1 # Subtract header
-            print(f"📊 Total rows in CSV now: {row_count}")
+        print("✅ Data written to Supabase.")
         
         return redirect(url_for('success'))
     
     except Exception as e:
+        print(f"Error submitting to Supabase: {e}")
         return f"Error: {str(e)}", 500
 
 @app.route('/success')
@@ -240,25 +193,18 @@ def success():
 
 @app.route('/charts')
 def charts():
-    """Generate and display charts from CSV data"""
+    """Generate and display charts from Supabase data"""
     try:
-        # Check if CSV exists and has data
-        if not os.path.exists(CSV_FILE):
-            return "No data available yet. Please submit the survey first.", 404
+        # Fetch all rows from Supabase
+        response = supabase.table("survey_responses").select("*").execute()
+        data = response.data
         
-        # Check file size to ensure it's not just headers
-        if os.path.getsize(CSV_FILE) < 100:  # File too small (likely just headers)
-            return "No data available yet. Please submit the survey first.", 404
-        
-        # Read CSV data with explicit path
-        print(f"Reading data for charts from: {CSV_FILE}")
-        df = pd.read_csv(CSV_FILE)
-        
-        # Verify DataFrame has actual data rows
-        if len(df) == 0:
-            print("⚠️ CSV exists but is empty (no data rows).")
+        if not data:
             return "No data available yet. Please submit the survey first.", 404
             
+        # Convert to DataFrame
+        df = pd.DataFrame(data)
+        
         print(f"✅ Loaded {len(df)} rows for analytics.")
         
         # Clear previous charts
@@ -474,5 +420,5 @@ if __name__ == '__main__':
     
     # Run the app
     # Use 0.0.0.0 to make it accessible externally (required for Render)
-    # Note: CSV initialization happens on first form submission via ensure_csv_exists()
+    # Note: Supabase initialization happens at module level
     app.run(host='0.0.0.0', port=port, debug=False)
